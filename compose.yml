@@ -1,0 +1,7 @@
+services:
+  server:
+    container_name: ayun
+    image: ayun:latest
+    build:
+      context: .
+      target: final
