@@ -1,7 +1,7 @@
 services:
   server:
     container_name: ayun
-    image: ayun:latest
+    image: rust:${RUST_VERSION}
     build:
       context: .
       target: final
