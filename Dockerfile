@@ -10,6 +10,6 @@ FROM debian:bookworm-slim as final
 
 WORKDIR /usr/app
 
-COPY --from=builder /usr/src/target/release/rust-docker ./rust-docker
+COPY --from=builder /usr/src/target/release/app ./run
 
-CMD ["./rust-docker"]
+CMD ["./run"]
