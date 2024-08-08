@@ -5,3 +5,11 @@ services:
     build:
       context: .
       target: final
+      args:
+        RUST_VERSION: ${RUST_VERSION}
+        APP_NAME: ${APP_NAME}
+    ports:
+      - "${APP_PORT}:8000"
+    environment:
+      - ADDRESS=0.0.0.0:8000
+      - RUST_LOG=debug
