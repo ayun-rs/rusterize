@@ -1,3 +1,9 @@
+### 开始
+
+```bash
+cp -r .docker/ ./
+```
+
 ### docker
 
 - build
