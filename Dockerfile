@@ -27,7 +27,7 @@ RUN --mount=type=bind,source=src,target=src \
     --mount=type=cache,target=/usr/local/cargo/registry/ \
     <<EOF
 set -e
-cargo build --locked --release
+cargo build --locked --release --bin=$APP_NAME
 cp ./target/release/$APP_NAME /bin/server
 EOF
 
