@@ -1,6 +1,6 @@
 services:
   server:
-    image: rust:${RUST_VERSION}
+    image: rust/${APP_NAME}
     build:
       context: .
       target: final
