@@ -28,6 +28,7 @@ services:
 #        RUST_VERSION: ${RUST_VERSION}
 #        BIN_NAME: cli
 #    volumes:
+#      - ./.env:/app/.env
 #      - ./config:/app/config
 #      - ./database:/app/database
 #      - ./public:/app/public
