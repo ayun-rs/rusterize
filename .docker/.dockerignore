@@ -1,0 +1,13 @@
+.vscode
+node_modules
+storage
+target
+.dockerignore
+.env.example
+.gitignore
+ .rustfmt.toml
+ docker-compose.yml
+ Dockerfile
+ eslint.config.mjs
+ jsconfig.json
+ README.md

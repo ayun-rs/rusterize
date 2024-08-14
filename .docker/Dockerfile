@@ -8,9 +8,9 @@
 # Create a stage for building the application.
 
 ARG RUST_VERSION
-ARG APP_NAME
+ARG BIN_NAME
 FROM rust:${RUST_VERSION}-slim-bullseye AS build
-ARG APP_NAME
+ARG BIN_NAME
 WORKDIR /app
 
 # Build the application.
@@ -27,8 +27,8 @@ RUN --mount=type=bind,source=src,target=src \
     --mount=type=cache,target=/usr/local/cargo/registry/ \
     <<EOF
 set -e
-cargo build --locked --release --bin=$APP_NAME
-cp ./target/release/$APP_NAME /bin/server
+cargo build --locked --release --bin=$BIN_NAME
+cp ./target/release/$BIN_NAME /bin/server
 EOF
 
 ################################################################################
