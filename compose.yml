@@ -13,6 +13,7 @@ services:
     stdin_open: true
     volumes:
       - ./.docker/context/workspace/.cargo:/.cargo
+      - ./.docker/context/workspace/.config:/root/.config
       - ./.docker/target:/target
       - ${WORKSPACE_PATH}:/home
     networks:
