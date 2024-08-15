@@ -11,6 +11,4 @@ RUN apt-get update && \
     cargo install nu
 
 # Install cargo-watch
-RUN cargo install cargo-watch
-
-ENTRYPOINT ["nu"]
+RUN cargo install cargo-watch sea-orm-cli

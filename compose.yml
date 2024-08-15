@@ -1,5 +1,7 @@
 services:
   workspace:
+    image: rust/workspace:${RUST_VERSION}
+    container_name: workspace
     build:
       context: ./.docker/context/workspace
       args:
@@ -8,6 +10,8 @@ services:
     stdin_open: true
     volumes:
       - ${WORKSPACE_PATH}:/home
+    networks:
+      - default
 
   postgres:
     image: postgres
@@ -16,10 +20,12 @@ services:
     environment:
       PGUSER: postgres
       POSTGRES_PASSWORD: example
-    volumes:
-      - ./.docker/data/postgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    volumes:
+      - ./.docker/data/postgres:/var/lib/postgresql/data
+    networks:
+      - default
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 1s
