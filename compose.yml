@@ -6,6 +6,9 @@ services:
       context: ./.docker/context/workspace
       args:
         RUST_VERSION: ${RUST_VERSION}
+        INSTALL_WATCH: false
+        INSTALL_SEA_ORM: false
+        INSTALL_NUSHELL: true
     tty: true
     stdin_open: true
     volumes:
