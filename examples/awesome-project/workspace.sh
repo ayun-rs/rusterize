@@ -1,2 +1,2 @@
 #!/bin/bash
-docker exec -it workspace nu
+docker exec -it rusterize-workspace nu
