@@ -60,3 +60,11 @@ docker-compose up
 ```bash
 docker-compose down --rmi local
 ```
+
+### workspace
+
+```bash
+docker-compose up workspace -d
+docker-compose exec workspace bash # bash
+docker-compose exec workspace nu # nushell
+```
