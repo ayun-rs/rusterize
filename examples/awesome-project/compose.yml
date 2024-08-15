@@ -9,11 +9,11 @@ services:
         BIN_NAME: app
     volumes:
       - ./.env:/app/.env
-      - ./config:/app/config
-      - ./database:/app/database
-      - ./public:/app/public
-      - ./resources:/app/resources
-      - ./storage:/app/storage
+#      - ./config:/app/config
+#      - ./database:/app/database
+#      - ./public:/app/public
+#      - ./resources:/app/resources
+#      - ./storage:/app/storage
     ports:
       - "8000:8000"
     environment:
@@ -30,11 +30,11 @@ services:
         BIN_NAME: cli
     volumes:
       - ./.env:/app/.env
-      - ./config:/app/config
-      - ./database:/app/database
-      - ./public:/app/public
-      - ./resources:/app/resources
-      - ./storage:/app/storage
+#      - ./config:/app/config
+#      - ./database:/app/database
+#      - ./public:/app/public
+#      - ./resources:/app/resources
+#      - ./storage:/app/storage
     environment:
       - RUST_LOG=debug
 
