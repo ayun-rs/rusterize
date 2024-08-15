@@ -12,6 +12,8 @@ services:
     tty: true
     stdin_open: true
     volumes:
+      - ./.docker/context/workspace/.cargo:/.cargo
+      - ./.docker/target:/target
       - ${WORKSPACE_PATH}:/home
     networks:
       - default

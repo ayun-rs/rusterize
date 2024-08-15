@@ -1,9 +1,7 @@
 ARG RUST_VERSION
 FROM rust:${RUST_VERSION}-slim-bullseye
 
-WORKDIR /root
-
-COPY . .
+WORKDIR /home
 
 ARG INSTALL_WATCH=false
 RUN if [ ${INSTALL_WATCH} = true ]; then \
