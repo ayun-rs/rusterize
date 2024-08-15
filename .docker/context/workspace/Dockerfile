@@ -21,9 +21,7 @@ fi;
 ARG INSTALL_NUSHELL=false
 RUN if [ ${INSTALL_NUSHELL} = true ]; then \
     apt-get update && \
-    apt-get install -y pkg-config libssl-dev cmake && \
+    apt-get install -y pkg-config libssl-dev && \
     apt-get clean && \
-    cargo install nu starship && mkdir -p ~/.cache/starship && \
-    nu && starship init nu | save -f ~/.cache/starship/init.nu &&\
-    echo "use ~/.cache/starship/init.nu" >> ~/.config/nushell/config.nu;\
+    cargo install nu;\
 fi;
