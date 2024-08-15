@@ -6,8 +6,8 @@ services:
       context: ./.docker/context/workspace
       args:
         RUST_VERSION: ${RUST_VERSION}
-        INSTALL_WATCH: false
-        INSTALL_SEA_ORM: false
+        INSTALL_WATCH: true
+        INSTALL_SEA_ORM: true
         INSTALL_NUSHELL: true
     tty: true
     stdin_open: true
@@ -17,8 +17,10 @@ services:
       - default
 
   postgres:
-    image: postgres
+    image: rusterize/postgres
     container_name: rusterize-postgres
+    build:
+      context: ./.docker/context/postgres
     restart: always
     shm_size: 128mb
     environment:
@@ -37,8 +39,10 @@ services:
       retries: 10
 
   mysql:
-    image: mysql
+    image: rusterize/mysql
     container_name: rusterize-mysql
+    build:
+      context: ./.docker/context/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
