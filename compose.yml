@@ -1,7 +1,7 @@
 services:
   workspace:
-    image: rust/workspace:${RUST_VERSION}
-    container_name: workspace
+    image: rusterize/workspace:${RUST_VERSION}
+    container_name: rusterize-workspace
     build:
       context: ./.docker/context/workspace
       args:
@@ -15,6 +15,7 @@ services:
 
   postgres:
     image: postgres
+    container_name: rusterize-postgres
     restart: always
     shm_size: 128mb
     environment:
@@ -34,11 +35,12 @@ services:
 
   mysql:
     image: mysql
+    container_name: rusterize-mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
     ports:
-      - "3306:3306"
+      - "3316:3306"
     volumes:
       - ./.docker/data/mysql:/var/lib/mysql/:rw
       - ./.docker/logs/mysql:/var/log/mysql/:rw

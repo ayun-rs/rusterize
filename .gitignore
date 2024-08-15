@@ -2,3 +2,5 @@ target
 .idea
 .docker/data
 .docker/logs
+.docker/target
+.env
