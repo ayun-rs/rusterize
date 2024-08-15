@@ -23,3 +23,5 @@ RUN if [ ${INSTALL_NUSHELL} = true ]; then \
     apt-get clean && \
     cargo install nu;\
 fi;
+
+EXPOSE 8000
