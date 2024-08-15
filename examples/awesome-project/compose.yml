@@ -1,6 +1,5 @@
 services:
   app:
-    image: ${APP_NAME}/app
     restart: always
     build:
       context: .
@@ -23,7 +22,6 @@ services:
       - default
 
   cli:
-    image: ${APP_NAME}/cli
     build:
       context: .
       target: final

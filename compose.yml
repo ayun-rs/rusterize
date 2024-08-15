@@ -1,7 +1,7 @@
 services:
   workspace:
     build:
-      context: ./workspace
+      context: ./.docker/context/workspace
       args:
         RUST_VERSION: ${RUST_VERSION}
     tty: true
