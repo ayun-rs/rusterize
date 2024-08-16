@@ -19,7 +19,7 @@ services:
       - default
 
   postgres:
-    image: postgres
+    image: postgres:latest
     container_name: rusterize-postgres
     restart: always
     shm_size: 128mb
@@ -39,7 +39,7 @@ services:
       retries: 10
 
   mysql:
-    image: mysql
+    image: mysql:latest
     container_name: rusterize-mysql
     restart: always
     environment:
@@ -88,6 +88,15 @@ services:
       - "9090:9090"
     volumes:
       - ./.docker/data/prometheus:/prometheus
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: rusterize-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./.docker/data/grafana:/var/lib/grafana
 
 networks:
   default:
