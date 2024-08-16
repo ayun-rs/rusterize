@@ -68,6 +68,14 @@ services:
     networks:
       - default
 
+  vector:
+    image: timberio/vector:latest-debian
+    container_name: rusterize-vector
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./.docker/context/vector:/etc/vector
+
   jaeger:
     image: jaegertracing/all-in-one:latest
     container_name: rusterize-jaegertracing
