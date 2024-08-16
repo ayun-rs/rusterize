@@ -70,6 +70,14 @@ services:
 #      - "14268:14268"
       - "16686:16686"
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: rusterize-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./.docker/data/prometheus:/prometheus
+
 networks:
   default:
     driver: bridge
