@@ -68,32 +68,6 @@ services:
     networks:
       - default
 
-  # for demo use
-  logify:
-    image: logify:latest
-    container_name: rusterize-logify
-    build:
-      context: ./.docker/context/logify
-
-  vector:
-    image: timberio/vector:latest-debian
-    container_name: rusterize-vector
-    tty: true
-    stdin_open: true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./.docker/context/vector:/etc/vector
-
-  dozzle:
-    image: amir20/dozzle:latest
-    container_name: rusterize-dozzle
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - "8080:8080"
-    environment:
-      DOZZLE_NO_ANALYTICS: true
-
   jaeger:
     image: jaegertracing/all-in-one:latest
     container_name: rusterize-jaegertracing
@@ -115,17 +89,91 @@ services:
     volumes:
       - ./.docker/data/prometheus:/prometheus
 
+  # for demo use
+  logify:
+    image: logify:latest
+    container_name: rusterize-logify
+    build:
+      context: ./.docker/context/logify
+
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: rusterize-dozzle
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8080:8080"
+    environment:
+      DOZZLE_NO_ANALYTICS: true
+
+  vector:
+    image: timberio/vector:latest-debian
+    container_name: rusterize-vector
+    tty: true
+    stdin_open: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./.docker/context/vector:/etc/vector
+    networks:
+      - loki
+
+  # https://grafana.com/docs/loki/latest/setup/install/docker/
+  # https://github.com/grafana/loki/blob/main/production/docker-compose.yaml
+  loki:
+    image: grafana/loki:2.9.10
+    container_name: rusterize-loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - loki
+
+  promtail:
+    image: grafana/promtail:2.9.10
+    container_name: rusterize-promtail
+    volumes:
+      - ./.docker/logs/promtail:/var/log
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - loki
+
   grafana:
     image: grafana/grafana:latest
     container_name: rusterize-grafana
     restart: unless-stopped
     ports:
       - "3000:3000"
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy 
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+        EOF
+        /run.sh
     volumes:
       - ./.docker/data/grafana:/var/lib/grafana
+    networks:
+      - loki
 
 networks:
   default:
     driver: bridge
     ipam:
       driver: default
+  loki:

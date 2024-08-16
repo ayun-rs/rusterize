@@ -1,11 +1,25 @@
+api:
+  enabled: true
+  address: 0.0.0.0:8686
+
 sources:
-  in:
-    type: "stdin"
+  logify:
+    type: "docker_logs"
+    include_images:
+      - "logify:latest"
+
+  vector:
+    type: "internal_logs"
 
 sinks:
-  out:
+  loki-sink-1:
+    type: "loki"
     inputs:
-      - "in"
-    type: "console"
+      - "logify"
+      - "vector"
     encoding:
-      codec: "text"
+      codec: "json"
+    compression: snappy
+    endpoint: http://loki:3100
+    labels:
+      source: vector
