@@ -15,8 +15,6 @@ services:
       - "8000:8000"
     volumes:
       - ./.docker/context/workspace/.config:/root/.config
-      - ./.docker/context/workspace/.cache:/root/.cache
-      - ./.docker/target:/target
       - ${WORKSPACE_PATH}:/home
     networks:
       - default

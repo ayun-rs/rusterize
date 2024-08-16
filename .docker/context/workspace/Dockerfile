@@ -16,12 +16,4 @@ RUN if [ ${INSTALL_SEA_ORM} = true ]; then \
     cargo install sea-orm-cli;\
 fi;
 
-ARG INSTALL_NUSHELL=false
-RUN if [ ${INSTALL_NUSHELL} = true ]; then \
-    apt-get update && \
-    apt-get install -y pkg-config libssl-dev cmake && \
-    apt-get clean && \
-    cargo install nu;\
-fi;
-
 EXPOSE 8000
