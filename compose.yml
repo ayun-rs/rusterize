@@ -1,6 +1,5 @@
 services:
   workspace:
-    image: rusterize/workspace:${RUST_VERSION}
     container_name: rusterize-workspace
     build:
       context: ./.docker/context/workspace
@@ -20,10 +19,8 @@ services:
       - default
 
   postgres:
-    image: rusterize/postgres
+    image: postgres
     container_name: rusterize-postgres
-    build:
-      context: ./.docker/context/postgres
     restart: always
     shm_size: 128mb
     environment:
@@ -42,10 +39,8 @@ services:
       retries: 10
 
   mysql:
-    image: rusterize/mysql
+    image: mysql
     container_name: rusterize-mysql
-    build:
-      context: ./.docker/context/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
@@ -62,11 +57,9 @@ services:
       timeout: 5s
       retries: 10
 
-  jaegertracing:
-    image: rusterize/jaegertracing
+  jaeger:
+    image: jaegertracing/all-in-one:latest
     container_name: rusterize-jaegertracing
-    build:
-      context: ./.docker/context/jaegertracing
     ports:
       - "4317:4317"
 #      - "5775:5775/udp"
