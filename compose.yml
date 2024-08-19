@@ -7,7 +7,6 @@ services:
         RUST_VERSION: ${RUST_VERSION}
         INSTALL_WATCH: true
         INSTALL_SEA_ORM: true
-        INSTALL_NUSHELL: true
     tty: true
     stdin_open: true
     ports:
@@ -17,6 +16,9 @@ services:
       - ${WORKSPACE_PATH}:/home
     networks:
       - default
+      - postgres
+      - mysql
+      - redis
 
   postgres:
     image: postgres:latest
@@ -25,13 +27,13 @@ services:
     shm_size: 128mb
     environment:
       PGUSER: postgres
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - ./.docker/data/postgres:/var/lib/postgresql/data
     networks:
-      - default
+      - postgres
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 1s
@@ -43,14 +45,14 @@ services:
     container_name: rusterize-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
       - ./.docker/data/mysql:/var/lib/mysql/:rw
       - ./.docker/logs/mysql:/var/log/mysql/:rw
     networks:
-      - default
+      - mysql
     healthcheck:
       test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD" ]
       interval: 1s
@@ -66,7 +68,7 @@ services:
     volumes:
       - ./.docker/data/redis:/data
     networks:
-      - default
+      - redis
 
   jaeger:
     image: jaegertracing/all-in-one:latest
@@ -177,4 +179,7 @@ networks:
     driver: bridge
     ipam:
       driver: default
+  postgres:
+  mysql:
+  redis:
   loki:
