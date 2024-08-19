@@ -140,6 +140,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: rusterize-grafana
+    user: "$UID:$GID"
     restart: unless-stopped
     ports:
       - "3000:3000"
