@@ -1,6 +1,6 @@
 services:
   app:
-    restart: always
+    restart: unless-stopped
     build:
       context: .
       target: final
@@ -8,18 +8,16 @@ services:
         RUST_VERSION: ${RUST_VERSION}
         BIN_NAME: app
     volumes:
-      - ./.env:/app/.env
-#      - ./config:/app/config
-#      - ./database:/app/database
-#      - ./public:/app/public
-#      - ./resources:/app/resources
-#      - ./storage:/app/storage
+      - ./database:/app/database
+      - ./resources:/app/resources
+      - ./storage:/app/storage
     ports:
       - "8000:8000"
-    environment:
-      - RUST_LOG=debug
+    env_file:
+      - .env
     networks:
       - default
+      - rusterize_mysql
 
   cli:
     build:
@@ -29,17 +27,18 @@ services:
         RUST_VERSION: ${RUST_VERSION}
         BIN_NAME: cli
     volumes:
-      - ./.env:/app/.env
-#      - ./config:/app/config
-#      - ./database:/app/database
-#      - ./public:/app/public
-#      - ./resources:/app/resources
-#      - ./storage:/app/storage
-    environment:
-      - RUST_LOG=debug
+      - ./database:/app/database
+      - ./resources:/app/resources
+      - ./storage:/app/storage
+    env_file:
+      - .env
+    networks:
+      - rusterize_mysql
 
 networks:
   default:
     driver: bridge
     ipam:
       driver: default
+  rusterize_mysql:
+    external: true

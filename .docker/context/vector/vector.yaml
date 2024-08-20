@@ -8,6 +8,11 @@ sources:
     include_images:
       - "logify:latest"
 
+  sinan:
+    type: "docker_logs"
+    include_images:
+      - "sinan-rs-app"
+
   vector:
     type: "internal_logs"
 
@@ -21,6 +26,17 @@ sinks:
     endpoint: http://loki:3100
     labels:
       source: logify
+
+  loki_sinan:
+    type: "loki"
+    inputs:
+      - "sinan"
+    encoding:
+      codec: "json"
+    endpoint: http://loki:3100
+    labels:
+      source: sinan
+
 
   loki_vector:
     type: "loki"
