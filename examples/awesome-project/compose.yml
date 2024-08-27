@@ -1,44 +1,32 @@
 services:
   app:
+    image: ${APP_NAME:-app}:${APP_VERSION:-latest}
+    container_name: ${APP_NAME:-app}
     restart: unless-stopped
     build:
       context: .
       target: final
       args:
-        RUST_VERSION: ${RUST_VERSION}
-        BIN_NAME: app
+        RUST_VERSION: ${RUST_VERSION:-1.80.1}
+        BIN_NAME: ${APP_NAME:-app}
     volumes:
-      - ./database:/app/database
-      - ./resources:/app/resources
-      - ./storage:/app/storage
+      - ./resources:/home/resources
+      - ./database:/home/database
+      - ./storage:/home/storage
     ports:
       - "8000:8000"
+    command:
+      - server
     env_file:
-      - .env
-    networks:
-      - default
-      - rusterize_mysql
-
-  cli:
-    build:
-      context: .
-      target: final
-      args:
-        RUST_VERSION: ${RUST_VERSION}
-        BIN_NAME: cli
-    volumes:
-      - ./database:/app/database
-      - ./resources:/app/resources
-      - ./storage:/app/storage
-    env_file:
-      - .env
+      - ./.env
+    healthcheck:
+      test: [ "CMD-SHELL", "/home/app status" ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
     networks:
       - rusterize_mysql
 
 networks:
-  default:
-    driver: bridge
-    ipam:
-      driver: default
   rusterize_mysql:
     external: true

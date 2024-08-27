@@ -6,11 +6,12 @@
 
 ################################################################################
 # Create a stage for building the application.
-
 ARG RUST_VERSION
 ARG BIN_NAME
+
 FROM rust:${RUST_VERSION}-slim-bullseye AS build
 ARG BIN_NAME
+
 WORKDIR /app
 
 # Build the application.
@@ -28,7 +29,7 @@ RUN --mount=type=bind,source=src,target=src \
     <<EOF
 set -e
 cargo build --locked --release --bin=$BIN_NAME
-cp ./target/release/$BIN_NAME /bin/server
+cp ./target/release/$BIN_NAME /bin/app
 EOF
 
 ################################################################################
@@ -44,6 +45,8 @@ EOF
 # (e.g.,    debian@sha256:ac707220fbd7b67fc19b112cee8170b41a9e97f703f588b2cdbbcdcecdd8af57).
 FROM debian:bullseye-slim AS final
 
+WORKDIR /home
+
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/develop/develop-images/dockerfile_best-practices/   #user
 ARG UID=10001
@@ -58,10 +61,7 @@ RUN adduser \
 USER appuser
 
 # Copy the executable from the "build" stage.
-COPY --from=build /bin/server /bin/
-
-# Expose the port that the application listens on.
-EXPOSE 8000
+COPY --from=build /bin/app ./
 
 # What the container should run when it is started.
-ENTRYPOINT ["/bin/server"]
+ENTRYPOINT ["/home/app"]
