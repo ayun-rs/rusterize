@@ -2,7 +2,7 @@ services:
   workspace:
     container_name: rusterize-workspace
     build:
-      context: ./.docker/context/workspace
+      context: ./context/workspace
       args:
         RUST_VERSION: ${RUST_VERSION}
         INSTALL_WATCH: true
@@ -12,7 +12,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./.docker/context/workspace/.config:/root/.config
+      - ./context/workspace/.config:/root/.config
       - ${WORKSPACE_PATH}:/home
     networks:
       - default
@@ -96,7 +96,7 @@ services:
     image: logify:latest
     container_name: rusterize-logify
     build:
-      context: ./.docker/context/logify
+      context: ./context/logify
 
   dozzle:
     image: amir20/dozzle:latest
@@ -115,7 +115,7 @@ services:
     stdin_open: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./.docker/context/vector:/etc/vector
+      - ./context/vector:/etc/vector
     networks:
       - loki
 
