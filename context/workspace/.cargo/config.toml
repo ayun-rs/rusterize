@@ -1,3 +1,2 @@
 [build]
-target-dir = "/home/target"
 rustflags = ["--cfg", "tokio_unstable"]
