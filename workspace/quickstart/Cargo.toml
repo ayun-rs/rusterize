@@ -1,0 +1,8 @@
+[package]
+name = "quickstart"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.7.6" }
+ayun = { version = "0.21.0", features = ["http1"] }

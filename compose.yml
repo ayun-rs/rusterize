@@ -4,15 +4,16 @@ services:
     build:
       context: ./context/workspace
       args:
-        RUST_VERSION: ${RUST_VERSION}
-        INSTALL_WATCH: true
-        INSTALL_SEA_ORM: true
+        RUST_VERSION: ${WORKSPACE_RUST_VERSION}
+        INSTALL_ZSH: ${WORKSPACE_INSTALL_ZSH}
+        INSTALL_WATCH: ${WORKSPACE_INSTALL_WATCH}
+        INSTALL_SEA_ORM: ${WORKSPACE_INSTALL_SEA_ORM}
     tty: true
     stdin_open: true
     ports:
       - "8000:8000"
     volumes:
-      - ./context/workspace/.config:/root/.config
+      - ./context/workspace/.cargo:/.cargo
       - ${WORKSPACE_PATH}:/home
     networks:
       - default
@@ -27,7 +28,7 @@ services:
     shm_size: 128mb
     environment:
       PGUSER: postgres
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -35,7 +36,7 @@ services:
     networks:
       - postgres
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready" ]
+      test: ["CMD-SHELL", "pg_isready"]
       interval: 1s
       timeout: 5s
       retries: 10
@@ -45,7 +46,7 @@ services:
     container_name: rusterize-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -54,7 +55,11 @@ services:
     networks:
       - mysql
     healthcheck:
-      test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD" ]
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD",
+        ]
       interval: 1s
       timeout: 5s
       retries: 10
@@ -75,12 +80,12 @@ services:
     container_name: rusterize-jaegertracing
     ports:
       - "4317:4317"
-#      - "5775:5775/udp"
-#      - "5778:5778"
-#      - "6831:6831/udp"
-#      - "6832:6832/udp"
-#      - "9411:9411"
-#      - "14268:14268"
+      #      - "5775:5775/udp"
+      #      - "5778:5778"
+      #      - "6831:6831/udp"
+      #      - "6832:6832/udp"
+      #      - "9411:9411"
+      #      - "14268:14268"
       - "16686:16686"
 
   prometheus:
@@ -142,7 +147,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: rusterize-grafana
-    user: "$UID:$GID"
+    user: "$GRAFANA_UID:$GRAFANA_GID"
     restart: unless-stopped
     ports:
       - "3000:3000"
