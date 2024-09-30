@@ -11,6 +11,15 @@ RUN if [ ${INSTALL_ZSH} = true ]; then \
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; \
     fi;
 
+ARG INSTALL_FISH=false
+RUN if [ ${INSTALL_FISH} = true ]; then \
+    apt-get update && \
+    apt-get install -y fish git && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    git config --global init.defaultBranch master && \
+    chsh -s $(which fish);\
+    fi;
+
 ARG INSTALL_WATCH=false
 RUN if [ ${INSTALL_WATCH} = true ]; then \
     cargo install cargo-watch;\

@@ -5,6 +5,7 @@ services:
       context: ./context/workspace
       args:
         RUST_VERSION: ${WORKSPACE_RUST_VERSION}
+        INSTALL_FISH: ${WORKSPACE_INSTALL_FISH}
         INSTALL_ZSH: ${WORKSPACE_INSTALL_ZSH}
         INSTALL_WATCH: ${WORKSPACE_INSTALL_WATCH}
         INSTALL_SEA_ORM: ${WORKSPACE_INSTALL_SEA_ORM}
